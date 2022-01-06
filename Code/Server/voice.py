@@ -46,7 +46,7 @@ while True:
         #pi_ear.dynamic_energy_threshold = True
         #pi_ear.energy_threshold = 100
         #pi_ear.pause_threshold = 0.7
-        pi_ear.adjust_for_ambient_noise(source, duration=1)
+        pi_ear.adjust_for_ambient_noise(source, duration=0.5)
         print("\033[0;35mpi: \033[0m I'm listening")
         audio = pi_ear.listen(source)
     try:
