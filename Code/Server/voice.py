@@ -1,7 +1,7 @@
 #!/bin/python
 
 # combine and modified codes from:
-# https://github.com/Freenove/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/blob/master/Code/Server/test.py
+# https://github.com/Freenove/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi
 # https://github.com/quangthanh010290/voice_control_using_raspberry/blob/master/rpi_voice_control.py
 
 import ctypes
