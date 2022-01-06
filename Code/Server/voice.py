@@ -10,6 +10,7 @@ import os
 import time
 import threading
 from Led import *
+from Servo import *
 from Motor import *
 from Ultrasonic import *
 from Thread import *
