@@ -71,6 +71,8 @@ while True:
         print("help detected, stop ultrasonic for several seconds")
         for i in range(5):
             _async_raise(ultrasonic_thread.ident, SystemExit)
+        ultrasonic.PWM.setMotorModel(0,0,0,0)
+        ultrasonic.pwm_S.setServoPwm('0',90)
         time.sleep(3)
         ultrasonic_thread=threading.Thread(target=ultrasonic.run)
         ultrasonic_thread.start()
