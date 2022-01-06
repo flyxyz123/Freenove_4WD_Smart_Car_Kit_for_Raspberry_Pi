@@ -64,8 +64,8 @@ while True:
         audio = pi_ear.listen(source)
         print("finish listen")
     try:
-        #you = pi_ear.recognize_google(audio)
-        you = pi_ear.recognize_sphinx(audio)
+        you = pi_ear.recognize_google(audio)
+        #you = pi_ear.recognize_sphinx(audio)
     except:
         you = ""
     print(you)
