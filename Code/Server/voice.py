@@ -57,7 +57,8 @@ while True:
     print(you)
     if "help" in you:
         print("help detected, stop ultrasonic for several seconds")
-        thread.stop_thread(ultrasonic_thread)
+        for i in range(5):
+            _async_raise(ultrasonic_thread.ident, SystemExit)
         time.sleep(3)
         ultrasonic_thread.start()
         #test_Led()
