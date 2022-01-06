@@ -54,8 +54,8 @@ try:
     ultrasonic_thread.start()
     pi_ear = sr.Recognizer()
     pi_ear.dynamic_energy_threshold = True
-    pi_ear.pause_threshold = 0.6
-    pi_ear.energy_threshold = 4000
+    pi_ear.pause_threshold = 0.8
+    pi_ear.energy_threshold = 3000
     while True:
         with mic as source:
             pi_ear.adjust_for_ambient_noise(source, duration=1)
