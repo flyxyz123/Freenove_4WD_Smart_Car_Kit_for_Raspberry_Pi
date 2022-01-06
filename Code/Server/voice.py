@@ -9,6 +9,8 @@ import pyaudio
 import os
 import time
 from Led import *
+#from Motor import *
+from Ultrasonic import *
 
 def test_Led():
     try:
@@ -32,10 +34,11 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     print("mic: " + mic_name)
     # pulse seems better than usb mic
     if "pulse" in mic_name:
-        print("pulse: " + mic_name)
+    #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
 pi_ear = sr.Recognizer()
+ultrasonic.run()
 
 while True:
     with mic as source:
@@ -50,5 +53,9 @@ while True:
         you = ""
     print(you)
     if "help" in you:
-        print("you say help: ", you)
-        test_Led()
+        print("help detected, stop ultrasonic for several seconds")
+        PWM.setMotorModel(0,0,0,0)
+        ultrasonic.pwm_S.setServoPwm('0',90)
+        time.sleep(3)
+        ultrasonic.run()
+        #test_Led()
