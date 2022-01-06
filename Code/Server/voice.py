@@ -49,8 +49,8 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
-#ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-#ultrasonic_thread.start()
+ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+ultrasonic_thread.start()
 pi_ear = sr.Recognizer()
 while True:
     with mic as source:
@@ -71,7 +71,7 @@ while True:
         print("help detected, stop ultrasonic for several seconds")
         for i in range(5):
             _async_raise(ultrasonic_thread.ident, SystemExit)
-        #time.sleep(3)
-        #ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-        #ultrasonic_thread.start()
+        time.sleep(3)
+        ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+        ultrasonic_thread.start()
         #test_Led()
