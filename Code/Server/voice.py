@@ -8,8 +8,9 @@ import speech_recognition as sr
 import pyaudio
 import os
 import time
+import threading
 from Led import *
-#from Motor import *
+from Motor import *
 from Ultrasonic import *
 
 def test_Led():
@@ -22,13 +23,10 @@ def test_Led():
         led.ledIndex(0x20,0,0,255)      #blue
         led.ledIndex(0x40,128,0,128)    #purple
         led.ledIndex(0x80,255,255,255)  #white'''
-        print ("The LED has been lit, the color is red orange yellow green cyan-blue blue white")
         time.sleep(1)
         led.colorWipe(led.strip, Color(0,0,0))  #turn off the light
-        print ("\nEnd of program")
     except KeyboardInterrupt:
         led.colorWipe(led.strip, Color(0,0,0))  #turn off the light
-        print ("\nEnd of program")
 
 for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     print("mic: " + mic_name)
@@ -38,7 +36,8 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
 pi_ear = sr.Recognizer()
-ultrasonic.run()
+ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+ultrasonic_thread.start()
 
 while True:
     with mic as source:
@@ -54,8 +53,10 @@ while True:
     print(you)
     if "help" in you:
         print("help detected, stop ultrasonic for several seconds")
+        stop_thread(ultrasonic_thread)
         PWM.setMotorModel(0,0,0,0)
-        ultrasonic.pwm_S.setServoPwm('0',90)
+        servo.setServoPwm('0',90)
+        servo.setServoPwm('1',90)
         time.sleep(3)
-        ultrasonic.run()
+        ultrasonic_thread.start()
         #test_Led()
