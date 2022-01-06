@@ -37,8 +37,8 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
 pi_ear = sr.Recognizer()
-#ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-#ultrasonic_thread.start()
+ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+ultrasonic_thread.start()
 time.sleep(1)
 while True:
     with mic as source:
@@ -57,7 +57,7 @@ while True:
     print(you)
     if "help" in you:
         print("help detected, stop ultrasonic for several seconds")
-        #thread.stop_thread(ultrasonic_thread)
+        thread.stop_thread(ultrasonic_thread)
         time.sleep(3)
-        #ultrasonic_thread.start()
+        ultrasonic_thread.start()
         #test_Led()
