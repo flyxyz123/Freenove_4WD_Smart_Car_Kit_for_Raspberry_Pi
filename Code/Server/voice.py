@@ -53,11 +53,11 @@ try:
     ultrasonic_thread=threading.Thread(target=ultrasonic.run)
     ultrasonic_thread.start()
     pi_ear = sr.Recognizer()
+    pi_ear.dynamic_energy_threshold = True
+    pi_ear.pause_threshold = 0.6
+    pi_ear.energy_threshold = 4000
     while True:
         with mic as source:
-            #pi_ear.pause_thpi_eareshold=1
-            #pi_ear.dynamic_energy_threshold = True
-            #pi_ear.pause_threshold = 0.6
             pi_ear.adjust_for_ambient_noise(source, duration=1)
             print("\033[0;35mpi: \033[0m I'm listening")
             audio = pi_ear.listen(source, phrase_time_limit=2)
