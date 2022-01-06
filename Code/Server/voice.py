@@ -49,8 +49,8 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
-ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-ultrasonic_thread.start()
+#ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+#ultrasonic_thread.start()
 pi_ear = sr.Recognizer()
 while True:
     with mic as source:
@@ -59,7 +59,7 @@ while True:
         #pi_ear.pause_threshold = 0.6
         pi_ear.adjust_for_ambient_noise(source, duration=0.5)
         print("\033[0;35mpi: \033[0m I'm listening")
-        audio = pi_ear.listen(source, timeout=3)
+        audio = pi_ear.listen(source)
     print("finish listen")
     try:
         you = pi_ear.recognize_google(audio)
@@ -72,6 +72,6 @@ while True:
         for i in range(5):
             _async_raise(ultrasonic_thread.ident, SystemExit)
         time.sleep(3)
-        ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-        ultrasonic_thread.start()
+        #ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+        #ultrasonic_thread.start()
         #test_Led()
