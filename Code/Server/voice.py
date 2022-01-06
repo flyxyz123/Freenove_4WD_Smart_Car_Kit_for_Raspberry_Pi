@@ -60,7 +60,7 @@ while True:
         pi_ear.adjust_for_ambient_noise(source, duration=0.5)
         print("\033[0;35mpi: \033[0m I'm listening")
         audio = pi_ear.listen(source, timeout=3)
-        print("finish listen")
+    print("finish listen")
     try:
         you = pi_ear.recognize_google(audio)
         #you = pi_ear.recognize_sphinx(audio)
