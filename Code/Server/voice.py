@@ -71,7 +71,7 @@ while True:
         print("help detected, stop ultrasonic for several seconds")
         for i in range(5):
             _async_raise(ultrasonic_thread.ident, SystemExit)
-        time.sleep(3)
+        #time.sleep(3)
         #ultrasonic_thread=threading.Thread(target=ultrasonic.run)
         #ultrasonic_thread.start()
         #test_Led()
