@@ -49,31 +49,37 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
-ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-ultrasonic_thread.start()
-pi_ear = sr.Recognizer()
-while True:
-    with mic as source:
-        #pi_ear.pause_thpi_eareshold=1
-        #pi_ear.dynamic_energy_threshold = True
-        #pi_ear.pause_threshold = 0.6
-        pi_ear.adjust_for_ambient_noise(source, duration=1)
-        print("\033[0;35mpi: \033[0m I'm listening")
-        audio = pi_ear.listen(source, phrase_time_limit=2)
-    print("finish listen")
-    try:
-        you = pi_ear.recognize_google(audio)
-        #you = pi_ear.recognize_sphinx(audio)
-    except:
-        you = ""
-    print(you)
-    if "help" in you:
-        print("help detected, stop ultrasonic for several seconds")
-        for i in range(5):
-            _async_raise(ultrasonic_thread.ident, SystemExit)
-        ultrasonic.PWM.setMotorModel(0,0,0,0)
-        ultrasonic.pwm_S.setServoPwm('0',90)
-        time.sleep(3)
-        ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-        ultrasonic_thread.start()
-        #test_Led()
+try:
+    ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+    ultrasonic_thread.start()
+    pi_ear = sr.Recognizer()
+    while True:
+        with mic as source:
+            #pi_ear.pause_thpi_eareshold=1
+            #pi_ear.dynamic_energy_threshold = True
+            #pi_ear.pause_threshold = 0.6
+            pi_ear.adjust_for_ambient_noise(source, duration=1)
+            print("\033[0;35mpi: \033[0m I'm listening")
+            audio = pi_ear.listen(source, phrase_time_limit=2)
+        print("finish listen")
+        try:
+            you = pi_ear.recognize_google(audio)
+            #you = pi_ear.recognize_sphinx(audio)
+        except:
+            you = ""
+        print(you)
+        if "help" in you:
+            print("help detected, stop ultrasonic for several seconds")
+            for i in range(5):
+                _async_raise(ultrasonic_thread.ident, SystemExit)
+            ultrasonic.PWM.setMotorModel(0,0,0,0)
+            ultrasonic.pwm_S.setServoPwm('0',90)
+            test_Led()
+            time.sleep(2)
+            ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+            ultrasonic_thread.start()
+except KeyboardInterrupt:
+    for i in range(5):
+        _async_raise(ultrasonic_thread.ident, SystemExit)
+    ultrasonic.PWM.setMotorModel(0,0,0,0)
+    ultrasonic.pwm_S.setServoPwm('0',90)
