@@ -12,7 +12,6 @@ import threading
 from Led import *
 from Motor import *
 from Ultrasonic import *
-from Thread import *
 
 def test_Led():
     try:
@@ -28,6 +27,18 @@ def test_Led():
         led.colorWipe(led.strip, Color(0,0,0))  #turn off the light
     except KeyboardInterrupt:
         led.colorWipe(led.strip, Color(0,0,0))  #turn off the light
+
+def _async_raise(tid, exctype):
+    """raises the exception, performs cleanup if needed"""
+    tid = ctypes.c_long(tid)
+    if not inspect.isclass(exctype):
+        exctype = type(exctype)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    if res == 0:
+        raise ValueError("invalid thread id")
+    elif res != 1:
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
 
 for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     print("mic: " + mic_name)
