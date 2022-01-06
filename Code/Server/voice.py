@@ -12,6 +12,7 @@ import threading
 from Led import *
 from Motor import *
 from Ultrasonic import *
+from Thread import *
 
 def test_Led():
     try:
@@ -35,28 +36,32 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
-pi_ear = sr.Recognizer()
-ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-ultrasonic_thread.start()
-
-while True:
-    with mic as source:
-        # pi_ear.pause_thpi_eareshold=1
-        pi_ear.adjust_for_ambient_noise(source, duration=0.5)
-        print("\033[0;35mpi: \033[0m I'm listening")
-        audio = pi_ear.listen(source)
-    try:
-        you = pi_ear.recognize_google(audio)
-        #you = pi_ear.recognize_sphinx(audio)
-    except:
-        you = ""
-    print(you)
-    if "help" in you:
-        print("help detected, stop ultrasonic for several seconds")
-        stop_thread(ultrasonic_thread)
-        PWM.setMotorModel(0,0,0,0)
-        servo.setServoPwm('0',90)
-        servo.setServoPwm('1',90)
-        time.sleep(3)
-        ultrasonic_thread.start()
-        #test_Led()
+try:
+    pi_ear = sr.Recognizer()
+    ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+    ultrasonic_thread.start()
+    while True:
+        with mic as source:
+            # pi_ear.pause_thpi_eareshold=1
+            pi_ear.adjust_for_ambient_noise(source, duration=0.5)
+            print("\033[0;35mpi: \033[0m I'm listening")
+            audio = pi_ear.listen(source)
+        try:
+            you = pi_ear.recognize_google(audio)
+            #you = pi_ear.recognize_sphinx(audio)
+        except:
+            you = ""
+        print(you)
+        if "help" in you:
+            print("help detected, stop ultrasonic for several seconds")
+            stop_thread(ultrasonic_thread)
+            PWM.setMotorModel(0,0,0,0)
+            servo.setServoPwm('0',90)
+            servo.setServoPwm('1',90)
+            time.sleep(3)
+            ultrasonic_thread.start()
+            #test_Led()
+except KeyboardInterrupt:
+    PWM.setMotorModel(0,0,0,0)
+    servo.setServoPwm('0',90)
+    servo.setServoPwm('1',90)
