@@ -43,11 +43,12 @@ def _async_raise(tid, exctype):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 def callback(self,audio):
+    print("start recognize")
     try:
         you = rec.recognize_sphinx(audio,keyword_entries=[("help", 1.0)])
     except:
         you = ""
-    print(you)
+    print("finish recognize, your speech is: ", you)
     if "help" in you:
         print("help detected, stop ultrasonic for several seconds")
         for i in range(5):
