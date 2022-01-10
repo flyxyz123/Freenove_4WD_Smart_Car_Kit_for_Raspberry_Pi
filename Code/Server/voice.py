@@ -63,8 +63,8 @@ try:
             audio = pi_ear.listen(source, phrase_time_limit=2)
         print("finish listen")
         try:
-            you = pi_ear.recognize_google(audio)
-            #you = pi_ear.recognize_sphinx(audio)
+            #you = pi_ear.recognize_google(audio)
+            you = pi_ear.recognize_sphinx(audio,keyword_entries=[("help", 1.0)])
         except:
             you = ""
         print(you)
