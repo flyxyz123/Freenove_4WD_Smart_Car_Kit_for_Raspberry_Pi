@@ -52,13 +52,13 @@ def callback(self, audio):
     if "help" in you:
         print("help detected, stop ultrasonic for several seconds")
         for i in range(5):
-            _async_raise(self.ultrasonic_thread.ident, SystemExit)
-        self.ultrasonic.PWM.setMotorModel(0,0,0,0)
-        self.ultrasonic.pwm_S.setServoPwm('0',90)
+            _async_raise(ultrasonic_thread.ident, SystemExit)
+        ultrasonic.PWM.setMotorModel(0,0,0,0)
+        ultrasonic.pwm_S.setServoPwm('0',90)
         #test_Led()
         time.sleep(2)
-        self.ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-        self.ultrasonic_thread.start()
+        ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+        ultrasonic_thread.start()
 
 for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     print("mic: " + mic_name)
