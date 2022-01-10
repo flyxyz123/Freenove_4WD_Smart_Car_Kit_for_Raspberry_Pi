@@ -75,8 +75,9 @@ try:
     rec.energy_threshold = 3000
     with mic as source:
         rec.adjust_for_ambient_noise(source, duration=1)
+    rec.listen_in_background(mic, callback, phrase_time_limit=1)
     while True:
-        rec.listen_in_background(mic, callback, phrase_time_limit=1)
+        time.sleep(0.1)
 except KeyboardInterrupt:
     for i in range(5):
         _async_raise(ultrasonic_thread.ident, SystemExit)
