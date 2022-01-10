@@ -43,22 +43,31 @@ def _async_raise(tid, exctype):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 def callback(self, audio):
-    print("start recognize")
     try:
-        you = rec.recognize_sphinx(audio, keyword_entries=[("help", 1.0)])
-    except:
-        you = ""
-    print("finish recognize, your speech is: ", you)
-    if "help" in you:
-        print("help detected, stop ultrasonic for several seconds")
+        print("start recognize")
+        try:
+            you = rec.recognize_sphinx(audio, keyword_entries=[("help", 1.0),("start", 1.0)])
+        except:
+            you = ""
+        print("finish recognize, your speech is: ", you)
+        if "start" in you:
+            ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+            ultrasonic_thread.start()
+        if "help" in you:
+            print("help detected, stop ultrasonic for several seconds")
+            for i in range(5):
+                _async_raise(ultrasonic_thread.ident, SystemExit)
+            ultrasonic.PWM.setMotorModel(0,0,0,0)
+            ultrasonic.pwm_S.setServoPwm('0',90)
+            #test_Led()
+            #time.sleep(2)
+            #ultrasonic_thread=threading.Thread(target=ultrasonic.run)
+            #ultrasonic_thread.start()
+    except KeyboardInterrupt:
         for i in range(5):
             _async_raise(ultrasonic_thread.ident, SystemExit)
         ultrasonic.PWM.setMotorModel(0,0,0,0)
         ultrasonic.pwm_S.setServoPwm('0',90)
-        #test_Led()
-        time.sleep(2)
-        ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-        ultrasonic_thread.start()
 
 for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     print("mic: " + mic_name)
@@ -67,20 +76,12 @@ for i, mic_name in enumerate (sr.Microphone.list_microphone_names()):
     #if "USB PnP Sound Device" in mic_name:
         mic = sr.Microphone(device_index=i, chunk_size=1024, sample_rate=48000)
 
-try:
-    ultrasonic_thread=threading.Thread(target=ultrasonic.run)
-    ultrasonic_thread.start()
-    rec = sr.Recognizer()
-    rec.dynamic_energy_threshold = True
-    rec.pause_threshold = 0.8
-    rec.energy_threshold = 3000
-    with mic as source:
-        rec.adjust_for_ambient_noise(source, duration=1)
-    rec.listen_in_background(mic, callback, phrase_time_limit=2)
-    while True:
-        time.sleep(0.1)
-except KeyboardInterrupt:
-    for i in range(5):
-        _async_raise(ultrasonic_thread.ident, SystemExit)
-    ultrasonic.PWM.setMotorModel(0,0,0,0)
-    ultrasonic.pwm_S.setServoPwm('0',90)
+rec = sr.Recognizer()
+rec.dynamic_energy_threshold = True
+rec.pause_threshold = 0.8
+rec.energy_threshold = 3000
+with mic as source:
+    rec.adjust_for_ambient_noise(source, duration=1)
+rec.listen_in_background(mic, callback, phrase_time_limit=2)
+while True:
+    time.sleep(0.1)
