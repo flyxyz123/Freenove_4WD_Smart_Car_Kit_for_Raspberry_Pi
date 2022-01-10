@@ -76,7 +76,7 @@ try:
     rec.energy_threshold = 3000
     with mic as source:
         rec.adjust_for_ambient_noise(source, duration=1)
-    rec.listen_in_background(mic, callback, phrase_time_limit=1)
+    rec.listen_in_background(mic, callback, phrase_time_limit=2)
     while True:
         time.sleep(0.1)
 except KeyboardInterrupt:
